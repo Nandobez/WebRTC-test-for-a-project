@@ -1,41 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="pt-BR">
+<head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WebRTC Demo</title>
-  </head>
-  <body>
-    <h2>1. Start your Webcam</h2>
+    <title>Teleconsulta MVP</title>
+    <link rel="stylesheet" href="style.css"> <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h2>1. Inicie sua Câmera</h2>
     <div class="videos">
-      <span>
-        <h3>Local Stream</h3>
-        <video id="webcamVideo" autoplay playsinline></video>
-      </span>
-      <span>
-        <h3>Remote Stream</h3>
-        <video id="remoteVideo" autoplay playsinline></video>
-      </span>
-
-
+        <span>
+            <h3>Stream Local</h3>
+            <video id="webcamVideo" autoplay playsinline></video>
+        </span>
+        <span>
+            <h3>Stream Remoto</h3>
+            <video id="remoteVideo" autoplay playsinline></video>
+        </span>
     </div>
 
-    <button id="webcamButton">Start webcam</button>
-    <h2>2. Create a new Call</h2>
-    <button id="callButton" disabled>Create Call (offer)</button>
+    <button id="webcamButton">Iniciar Câmera</button>
 
-    <h2>3. Join a Call</h2>
-    <p>Answer the call from a different browser window or device</p>
-    
-    <input id="callInput" />
-    <button id="answerButton" disabled>Answer</button>
 
-    <h2>4. Hangup</h2>
 
-    <button id="hangupButton" disabled>Hangup</button>
+    <h2>2. Criar uma Nova Chamada</h2>
+    <button id="callButton" disabled>Criar Chamada (oferta)</button>
+
+
+
+    <h2>3. Entrar em uma Chamada</h2>
+    <p>Atenda a chamada em uma janela ou dispositivo diferente.</p>
+
+    <input id="callInput" placeholder="Insira o ID da chamada" />
+    <button id="answerButton" disabled>Atender</button>
+
+
+
+    <h2>4. Encerrar Chamada</h2>
+    <button id="hangupButton" disabled>Desligar</button>
 
     <script type="module" src="/main.js"></script>
 
-  </body>
+</body>
 </html>

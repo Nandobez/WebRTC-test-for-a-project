@@ -4,7 +4,15 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 
 const firebaseConfig = {
-  // your config
+  // MUDE A CONFIGURAÇAO A PARTIR DESSE PONTO
+    apiKey: "your data",
+    authDomain: "your data",
+    projectId: "your data",
+    storageBucket: "your data",
+    messagingSenderId: "your data",
+    appId: "your data"
+
+    //ATÉ ESSE, PELA SUA CONFIG DO FIREBASE
 };
 
 if (!firebase.apps.length) {
@@ -21,12 +29,12 @@ const servers = {
   iceCandidatePoolSize: 10,
 };
 
-// Global State
+// Estado Global
 const pc = new RTCPeerConnection(servers);
 let localStream = null;
 let remoteStream = null;
 
-// HTML elements
+// Elementos de HTML
 const webcamButton = document.getElementById('webcamButton');
 const webcamVideo = document.getElementById('webcamVideo');
 const callButton = document.getElementById('callButton');
@@ -35,18 +43,18 @@ const answerButton = document.getElementById('answerButton');
 const remoteVideo = document.getElementById('remoteVideo');
 const hangupButton = document.getElementById('hangupButton');
 
-// 1. Setup media sources
+// 1. Setup de Mídia
 
 webcamButton.onclick = async () => {
   localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   remoteStream = new MediaStream();
 
-  // Push tracks from local stream to peer connection
+  // Pegar tracks de video da conexo p2p local
   localStream.getTracks().forEach((track) => {
     pc.addTrack(track, localStream);
   });
 
-  // Pull tracks from remote stream, add to video stream
+  // Pegar conexao remota e adicionar a transmissao
   pc.ontrack = (event) => {
     event.streams[0].getTracks().forEach((track) => {
       remoteStream.addTrack(track);
@@ -61,21 +69,21 @@ webcamButton.onclick = async () => {
   webcamButton.disabled = true;
 };
 
-// 2. Create an offer
+// 2. Criar um token
 callButton.onclick = async () => {
-  // Reference Firestore collections for signaling
+  // Referencia da Firestore para sinais
   const callDoc = firestore.collection('calls').doc();
   const offerCandidates = callDoc.collection('offerCandidates');
   const answerCandidates = callDoc.collection('answerCandidates');
 
   callInput.value = callDoc.id;
 
-  // Get candidates for caller, save to db
+  // Buscar candidatos a conexao e adicionar no db
   pc.onicecandidate = (event) => {
     event.candidate && offerCandidates.add(event.candidate.toJSON());
   };
 
-  // Create offer
+  // Criar chamada
   const offerDescription = await pc.createOffer();
   await pc.setLocalDescription(offerDescription);
 
@@ -86,7 +94,7 @@ callButton.onclick = async () => {
 
   await callDoc.set({ offer });
 
-  // Listen for remote answer
+  // Buscar ligaçao
   callDoc.onSnapshot((snapshot) => {
     const data = snapshot.data();
     if (!pc.currentRemoteDescription && data?.answer) {
@@ -95,7 +103,7 @@ callButton.onclick = async () => {
     }
   });
 
-  // When answered, add candidate to peer connection
+  // Quando respondida, conectar
   answerCandidates.onSnapshot((snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === 'added') {
@@ -108,7 +116,7 @@ callButton.onclick = async () => {
   hangupButton.disabled = false;
 };
 
-// 3. Answer the call with the unique ID
+// 3. Responder com id unico
 answerButton.onclick = async () => {
   const callId = callInput.value;
   const callDoc = firestore.collection('calls').doc(callId);
